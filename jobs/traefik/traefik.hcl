@@ -11,8 +11,8 @@ job "traefik" {
 
       update {
         max_parallel     = 2
-        min_healthy_time = "30s"
-        healthy_deadline = "5m"
+        min_healthy_time = "10s"
+        healthy_deadline = "1m"
       }
 
       service {
