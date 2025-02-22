@@ -1,0 +1,17 @@
+on:
+  push:
+    branches:
+    - main
+jobs:
+  deploy_nomad:
+    name: Deploy to lab
+    runs-on: ubuntu-22.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: lucasmelin/setup-nomad@v1
+      - name: Tailscale
+        uses: tailscale/github-action@v3
+        with:
+          oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
+          oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
+          tags: tag:homelab
