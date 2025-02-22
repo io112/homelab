@@ -4,6 +4,11 @@ on:
     - main
 jobs:
   deploy_nomad:
+    strategy:
+      matrix:
+        include:
+          - dir: jobs/traefik
+            file: traefik.hcl
     name: Deploy to lab
     runs-on: ubuntu-22.04
     steps:
@@ -15,3 +20,9 @@ jobs:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:homelab
+      - name: Deploy app
+        working-directory: ${{ matrix.dir }}
+        env:
+          NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
+        run:
+          nomad job run -address http://192.168.40.120:4646 traefik.hcl

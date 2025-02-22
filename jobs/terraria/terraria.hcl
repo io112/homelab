@@ -24,7 +24,6 @@ job "terraria" {
         config {
           image = "ryshe/terraria:latest"
           network_mode = "host"
-          args = ["--configFile=/local/traefik.yaml"]
           volumes = [
             "/home/io12/terraria-worlds:/root/.local/share/Terraria/Worlds"
           ]

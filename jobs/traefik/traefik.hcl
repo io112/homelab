@@ -9,6 +9,12 @@ job "traefik" {
         }
       }
 
+      update {
+        max_parallel     = 2
+        min_healthy_time = "30s"
+        healthy_deadline = "5m"
+      }
+
       service {
         name     = "traefik"
         port     = "traefik-ui"
