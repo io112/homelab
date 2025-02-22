@@ -13,14 +13,23 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            changed:
+              - '${{ matrix.dir }}/**'
       - uses: lucasmelin/setup-nomad@v1
+        if: steps.filter.outputs.changed == 'true'
       - name: Tailscale
+        if: steps.filter.outputs.changed == 'true'
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:homelab
       - name: Deploy app
+        if: steps.filter.outputs.changed == 'true'
         working-directory: ${{ matrix.dir }}
         env:
           NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
