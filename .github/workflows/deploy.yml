@@ -9,6 +9,8 @@ jobs:
         include:
           - dir: jobs/traefik
             file: traefik.hcl
+          - dir: jobs/cloudflared
+            file: cloudflared.hcl
     name: Deploy to lab
     runs-on: ubuntu-22.04
     steps:

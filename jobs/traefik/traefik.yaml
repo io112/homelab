@@ -1,3 +1,23 @@
 api:
    dashboard: true
    insecure: true
+log:
+  level: DEBUG
+entryPoints:
+  web:
+    address: ":80"
+
+  websecure:
+    address: ":443"
+certificatesResolvers:
+  letsencrypt:
+    acme:
+      storage: /etc/traefik/acme/acme.json
+      email: admin@io12.me
+      dnsChallenge:
+        provider: cloudflare
+        delayBeforeCheck: 0
+
+providers:
+  file:
+    filename: /local/config.yaml

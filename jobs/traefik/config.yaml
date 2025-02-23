@@ -1,0 +1,37 @@
+http:
+  # Add the router
+  routers:
+    nas:
+      tls:
+        certResolver: letsencrypt
+      entryPoints:
+      - websecure
+      service: truenas
+      rule: Host(`nas.io12.dev`)
+    immich:
+      tls:
+        certResolver: letsencrypt
+      entryPoints:
+      - websecure
+      service: immich
+      rule: Host(`photo.io12.dev`) || Host(`photo.io12.me`)
+    nomad-ui:
+      tls:
+        certResolver: letsencrypt
+      entryPoints:
+      - websecure
+      service: nomad-ui
+      rule: Host(`nomad-ui.io12.dev`)
+  services:
+    truenas:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.40.122/"
+    immich:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.40.122:30041/"
+    nomad-ui:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.40.120:4646/"
