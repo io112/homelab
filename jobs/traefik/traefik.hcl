@@ -35,7 +35,8 @@ job "traefik" {
           network_mode = "host"
           args = ["--configFile=/local/traefik.yaml"]
           volumes = ["/opt/acme:/etc/traefik/acme"]
-         }
+        }
+
         template {
           destination = "/local/traefik.yaml"
           data = file("./traefik.yaml")
