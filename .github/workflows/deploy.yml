@@ -36,4 +36,4 @@ jobs:
         env:
           NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
         run:
-          nomad job run -address http://192.168.40.120:4646 traefik.hcl
+          nomad job run -address http://192.168.40.120:4646 ${{ matrix.file }}

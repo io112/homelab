@@ -41,6 +41,7 @@ job "traefik" {
           destination = "/local/traefik.yaml"
           data = file("./traefik.yaml")
         }
+        
         template {
           destination = "/local/config.yaml"
           data = file("./config.yaml")

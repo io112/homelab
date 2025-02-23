@@ -28,6 +28,7 @@ job "tunnel" {
         image = "cloudflare/cloudflared:latest"
         args = ["tunnel","--no-autoupdate", "run", "--token", "${TUNNEL_TOKEN}"]
       }
+      
       template {
         data = <<EOH
         TUNNEL_TOKEN="{{with secret "providers/data/cloudflare"}}{{.Data.data.tunnel_token}}{{end}}"
