@@ -1,0 +1,32 @@
+- name: explicitly gather facts
+  setup:
+
+- name: Create ansible user
+  become: yes
+  user:
+    name: ansible
+    shell: /bin/bash
+    groups: sudo
+    append: yes
+
+
+- name: allow ansible user to have passwordless sudo
+  become: yes
+  lineinfile:
+    path: /etc/sudoers.d/ansible
+    line: "ansible ALL=(ALL) NOPASSWD: ALL"
+    mode: 0440
+    create: yes
+    validate: /usr/sbin/visudo -cf %s
+
+
+- name: create ansible's authorized_keys
+  become: yes
+  become_user: "{{ 'root' if ansible_check_mode else 'ansible' }}"
+  authorized_key:
+    user: ansible
+    path: "/home/ansible/.ssh/authorized_keys"
+    key: |
+       {{ lookup('file', 'ansible.ed25519.key.pub') }}
+    exclusive: yes
+

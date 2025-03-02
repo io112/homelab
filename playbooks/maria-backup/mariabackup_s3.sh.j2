@@ -1,0 +1,37 @@
+#!/bin/bash
+# Variables
+set -e
+
+backup_dir={{ backup_dir }}
+backup_date=$(date +%F)
+local_backup="${backup_dir}/mariabackup-${backup_date}"
+s3_bucket="{{ s3_bucket }}"
+
+# AWS Credentials
+export AWS_DEFAULT_REGION="{{ aws_region }}"
+export AWS_ENDPOINT_URL="{{ aws_endpoint }}"
+export AWS_ACCESS_KEY_ID="{{ aws_access_key }}"
+export AWS_SECRET_ACCESS_KEY="{{ aws_secret_key }}"
+
+# Check AWS S3 connection
+echo "CHECKING AWS CONNECTION"
+aws s3 ls "{{ s3_bucket }}"
+
+# Run mariabackup to create a backup in the target directory
+echo "STARTING BACKUP"
+mariabackup --defaults-file="{{ backup_home }}/.my.cnf" --backup --stream=xbstream  | zstd - -o "${local_backup}.xb.zst" -f -1
+
+
+# Upload the compressed backup to S3 using the AWS CLI
+echo "UPLOADING BACKUP"
+aws s3 cp "${local_backup}.xb.zst" "${s3_bucket}"
+
+# Remove local backup files
+rm -rf "${local_backup}" "${local_backup}.xb.zst"
+
+# Cleanup S3: Keep only the last 5 backups
+# List the backups in S3, sort them, and remove all except the last five.
+old_backups=$(aws s3 ls {{ s3_bucket }} | sort | head -n -5 | awk '{print $4}')
+for backup in $old_backups; do
+    aws s3 rm "{{ s3_bucket }}$backup"
+done

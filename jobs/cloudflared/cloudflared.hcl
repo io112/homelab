@@ -1,4 +1,6 @@
 job "tunnel" {
+  datacenters = ["homelab"]
+
   type = "service"
 
   group "tunnel" {

@@ -1,0 +1,86 @@
+- name: Setup MariaDB Backup User and Environment
+  hosts: mariadb
+  gather_facts: no
+  become: yes
+  vars:
+    backup_linux_user: mariadb_backup
+    backup_home: "/home/{{ backup_linux_user }}"
+    backup_shell: /usr/sbin/nologin
+    backup_dir: /opt/backups/mariadb
+    s3_bucket: "s3://pfc/mariabackup/"
+    cron_schedule: "0 3 * * *"  # 3AM every day
+    aws_region: "nbg1"
+    aws_endpoint: "https://nbg1.your-objectstorage.com"
+
+  tasks:
+    - name: Read mariadb backup user secrets
+      become: no
+      community.hashi_vault.vault_kv2_get:
+        url: 'https://vault.io12.dev:8200'
+        engine_mount_point: pfc
+        token: "{{ lookup('ansible.builtin.env', 'VAULT_TOKEN') }}"
+        path: mariabackup
+      register: vault_response
+      delegate_to: localhost
+
+    - name: Set db facts
+      ansible.builtin.set_fact:
+        mariadb_user: "{{ vault_response.secret['user'] }}"
+        mariadb_password: "{{ vault_response.secret['password'] }}"
+
+    - name: Read s3 secrets
+      become: no
+      community.hashi_vault.vault_kv2_get:
+        url: 'https://vault.io12.dev:8200'
+        engine_mount_point: providers
+        token: "{{ lookup('ansible.builtin.env', 'VAULT_TOKEN') }}"
+        path: hetzner_s3
+      register: vault_response
+      delegate_to: localhost
+
+    - name: Set s3 facts
+      ansible.builtin.set_fact:
+        aws_access_key: "{{ vault_response.secret['access_key'] }}"
+        aws_secret_key: "{{ vault_response.secret['secret_key'] }}"
+    - name: Create Linux backup user with no login shell
+      user:
+        name: "{{ backup_linux_user }}"
+        shell: "{{ backup_shell }}"
+        create_home: yes
+        state: present
+
+    - name: Create backup directory
+      file:
+        path: "{{ backup_dir }}"
+        state: directory
+        owner: "{{ backup_linux_user }}"
+        group: "{{ backup_linux_user }}"
+        mode: "0755"
+
+    - name: Create MariaDB credentials file in backup user home
+      copy:
+        dest: "{{ backup_home }}/.my.cnf"
+        content: |
+          [client]
+          user={{ mariadb_user }}
+          password={{ mariadb_password }}
+          host=localhost
+        owner: "{{ backup_linux_user }}"
+        group: "{{ backup_linux_user }}"
+        mode: "0600"
+
+    - name: Upload mariabackup S3 script from template
+      template:
+        src: mariabackup_s3.sh.j2
+        dest: "{{ backup_home }}/mariabackup_s3.sh"
+        owner: "{{ backup_linux_user }}"
+        group: "{{ backup_linux_user }}"
+        mode: "0755"
+
+    - name: Schedule nightly MariaDB backup cron job with S3 upload
+      cron:
+        name: "Nightly MariaDB Backup with S3 upload"
+        user: "{{ backup_linux_user }}"
+        minute: "0"
+        hour: "3"
+        job: "{{ backup_home }}/mariabackup_s3.sh"

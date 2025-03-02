@@ -1,0 +1,4 @@
+mariadb:
+    hosts:
+        whale:
+            ansible_host: whale.it108.org
