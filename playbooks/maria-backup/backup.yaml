@@ -48,6 +48,8 @@
         shell: "{{ backup_shell }}"
         create_home: yes
         state: present
+        groups: mysql
+        append: yes
 
     - name: Create backup directory
       file:
