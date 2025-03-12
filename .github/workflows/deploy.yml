@@ -11,6 +11,14 @@ jobs:
             file: traefik.hcl
           - dir: jobs/cloudflared
             file: cloudflared.hcl
+          - dir: jobs/blinko
+            file: blinko.hcl
+          - dir: jobs/postgres
+            file: postgres.hcl
+          - dir: jobs/storage-controller
+            file: storage-controller.hcl
+          - dir: jobs/storage-node
+            file: storage-node.hcl
     name: Deploy to lab
     runs-on: ubuntu-22.04
     steps:

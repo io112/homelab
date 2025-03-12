@@ -15,6 +15,20 @@ http:
       - websecure
       service: immich
       rule: Host(`photo.io12.dev`) || Host(`photo.io12.me`)
+    minio:
+      tls:
+        certResolver: letsencrypt
+      entryPoints:
+      - websecure
+      service: minio
+      rule: Host(`minio.io12.dev`)
+    minio_s3:
+      tls:
+        certResolver: letsencrypt
+      entryPoints:
+      - websecure
+      service: minio-s3
+      rule: Host(`s3.io12.dev`)
     nomad-ui:
       tls:
         certResolver: letsencrypt
@@ -27,6 +41,14 @@ http:
       loadBalancer:
         servers:
         - url: "http://192.168.40.122/"
+    minio:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.40.122:9002/"
+    minio-s3:
+      loadBalancer:
+        servers:
+        - url: "http://192.168.40.122:9000/"
     immich:
       loadBalancer:
         servers:

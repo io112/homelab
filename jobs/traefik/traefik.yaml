@@ -6,6 +6,10 @@ log:
 entryPoints:
   web:
     address: ":80"
+  csi-tcp:
+    address: ":9100"
+  postgres-tcp:
+    address: ":5432"
 
   websecure:
     address: ":443"
@@ -22,5 +26,12 @@ certificatesResolvers:
         delayBeforeCheck: 0
 
 providers:
+  nomad:
+    watch: true
+    endpoint:
+      address: http://192.168.40.120:4646
+      {{with secret "providers/data/nomad_observer"}}
+      token: {{.Data.data.token}}
+      {{end}}
   file:
     filename: /local/config.yaml
