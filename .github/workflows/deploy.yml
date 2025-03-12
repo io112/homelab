@@ -5,6 +5,7 @@ on:
 jobs:
   deploy_nomad:
     strategy:
+      fail-fast: false
       matrix:
         include:
           - dir: jobs/traefik
