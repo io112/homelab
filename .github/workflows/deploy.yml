@@ -18,20 +18,20 @@ jobs:
             file: blinko.hcl
           - dir: jobs/postgres
             file: postgres.hcl
-          - dir: jobs/storage-controller
-            file: storage-controller.hcl
-          - dir: jobs/storage-node
-            file: storage-node.hcl
+#          - dir: jobs/storage-controller
+#            file: storage-controller.hcl
+#          - dir: jobs/storage-node
+#            file: storage-node.hcl
     name: Deploy to lab
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-#      - uses: dorny/paths-filter@v3
-#        id: filter
-#        with:
-#          filters: |
-#            changed:
-#              - './${{ matrix.dir }}/**'
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            changed:
+              - './${{ matrix.dir }}/**'
       - uses: lucasmelin/setup-nomad@v1
 #        if: steps.filter.outputs.changed == 'true'
       - name: Tailscale
