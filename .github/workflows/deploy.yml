@@ -18,6 +18,8 @@ jobs:
             file: blinko.hcl
           - dir: jobs/postgres
             file: postgres.hcl
+          - dir: jobs/gitea
+            file: gitea.hcl
 #          - dir: jobs/storage-controller
 #            file: storage-controller.hcl
 #          - dir: jobs/storage-node

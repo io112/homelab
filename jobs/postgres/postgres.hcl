@@ -6,6 +6,7 @@ job "postgres-job" {
   group "postgres" {
     count = 1
     network {
+      mode = "bridge"
       port "db" {
         to     = 5432
       }
@@ -13,6 +14,7 @@ job "postgres-job" {
 
     task "postgres" {
       driver = "docker"
+      user = "3000"
       config {
         image = "postgres"
         ports = ["db"]

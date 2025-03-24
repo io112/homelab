@@ -53,6 +53,8 @@ job "blinko" {
       }
 
       task "blinko-task" {
+        user = "3000"
+        
         vault {
           policies = ["blinko"]
           change_mode   = "restart"
@@ -79,7 +81,10 @@ job "blinko" {
         template {
           data = <<EOH
           NEXTAUTH_SECRET="{{with secret "apps/data/blinko_secret"}}{{.Data.data.secret}}{{end}}"
-          DATABASE_URL="{{with secret "postgres/creds/writer"}}postgresql://{{.Data.username}}:{{.Data.password}}@postgres.io12.dev:5432/blinko{{end}}"
+          
+          {{ range nomadService "postgres" }}
+          DATABASE_URL="{{with secret "postgres/creds/writer"}}postgresql://{{.Data.username}}:{{.Data.password}}{{end}}@{{ .Address }}:{{ .Port }}/blinko"
+          {{ end }}
         EOH
 
           destination = "secrets/file.env"
