@@ -53,7 +53,6 @@ job "blinko" {
       }
 
       task "blinko-task" {
-        user = "3000"
         
         vault {
           policies = ["blinko"]

@@ -20,6 +20,10 @@ jobs:
             file: postgres.hcl
           - dir: jobs/gitea
             file: gitea.hcl
+          - dir: jobs/paperless
+            file: paperless.hcl
+          - dir: jobs/redis
+            file: redis.hcl
 #          - dir: jobs/storage-controller
 #            file: storage-controller.hcl
 #          - dir: jobs/storage-node

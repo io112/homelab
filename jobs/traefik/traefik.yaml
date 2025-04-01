@@ -10,6 +10,8 @@ entryPoints:
     address: ":9100"
   postgres-tcp:
     address: ":5432"
+  redis-tcp:
+    address: ":6379"
 
   websecure:
     address: ":443"

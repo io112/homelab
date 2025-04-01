@@ -2,11 +2,6 @@ job "democratic-csi-nfs-controller" {
   datacenters = ["homelab"]
 
   group "controller" {
-    network {
-      port "grpc" {
-        static     = 9200
-      }
-    }
 
     update {
       max_parallel     = 2
@@ -25,7 +20,6 @@ job "democratic-csi-nfs-controller" {
 
       config {
         image = "docker.io/democraticcsi/democratic-csi:latest"
-        ports = ["grpc"]
 
         args = [
           "--csi-version=1.2.0",
@@ -90,7 +84,7 @@ job "democratic-csi-nfs-controller" {
           datasetEnableQuotas: true
           datasetEnableReservation: false
           datasetPermissionsMode: "0777"
-          datasetPermissionsUser: 3000
+          datasetPermissionsUser: 0
           datasetPermissionsGroup: 0
           #datasetPermissionsAcls:
           #- "-m everyone@:full_set:allow"
@@ -100,7 +94,7 @@ job "democratic-csi-nfs-controller" {
           shareAlldirs: false
           shareAllowedHosts: []
           shareAllowedNetworks: []
-          shareMaprootUser: {{with secret "providers/data/nas_csi"}}{{.Data.data.ssh_username}}{{end}}
+          shareMaprootUser: root
           shareMaprootGroup: wheel
           shareMapallUser: ""
           shareMapallGroup: ""

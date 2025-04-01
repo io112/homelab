@@ -88,7 +88,7 @@ job "storage-node" {
             datasetEnableQuotas: true
             datasetEnableReservation: false
             datasetPermissionsMode: "0777"
-            datasetPermissionsUser: 3000
+            datasetPermissionsUser: 0
             datasetPermissionsGroup: 0
             #datasetPermissionsAcls:
             #- "-m everyone@:full_set:allow"
@@ -98,7 +98,7 @@ job "storage-node" {
             shareAlldirs: false
             shareAllowedHosts: []
             shareAllowedNetworks: []
-            shareMaprootUser: {{with secret "providers/data/nas_csi"}}{{.Data.data.ssh_username}}{{end}}
+            shareMaprootUser: root
             shareMaprootGroup: wheel
             shareMapallUser: ""
             shareMapallGroup: ""

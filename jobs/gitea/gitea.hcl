@@ -68,7 +68,7 @@ job "gitea" {
             }
 
             config {
-                image = "gitea/gitea:latest-rootless"
+                image = "gitea/gitea:1.23.5-rootless"
                 ports = ["http"]
             }
 
@@ -80,7 +80,7 @@ job "gitea" {
             }
 
             resources {
-                cpu    = 200
+                cpu    = 500
                 memory = 512
             }
 
@@ -92,9 +92,9 @@ job "gitea" {
 
                 GITEA__database__NAME=gitea
 
-                {{with secret "postgres/creds/gitea-writer"}}
-                GITEA__database__USER={{.Data.username}}
-                GITEA__database__PASSWD={{.Data.password}}
+                {{with secret "providers/data/gitea_root"}}
+                GITEA__database__USER={{.Data.data.user}}
+                GITEA__database__PASSWD={{.Data.data.password}}
                 {{end}}
                 EOH
 

@@ -1,30 +1,26 @@
-
-job "postgres-job" {
+job "redis-job" {
   datacenters = ["homelab"]
   type = "service"
 
-  group "postgres" {
+  group "redis" {
     count = 1
     network {
       mode = "bridge"
       port "db" {
-        to     = 5432
+        to = 6379
       }
     }
 
-    task "postgres" {
+    task "redis" {
       driver = "docker"
+      user = "3000"
       config {
-        image = "postgres"
+        image = "redis:7-alpine"
         ports = ["db"]
-      }
-
-      vault {
-        policies = ["access-homelab-pg"]
-      }
-
-      env {
-          POSTGRES_USER="root"
+        command = "redis-server"
+        args = [
+          "--appendonly", "yes"
+        ]
       }
 
       logs {
@@ -33,34 +29,25 @@ job "postgres-job" {
       }
 
       resources {
-        cpu = 1000
-        memory = 1024
+        cpu    = 500
+        memory = 256
       }
 
       volume_mount {
-        volume      = "postgres-data"
-        destination = "/var/lib/postgresql/data"
-      }
-
-      template {
-        data = <<EOH
-        POSTGRES_PASSWORD="{{with secret "providers/data/postgres_homelab"}}{{.Data.data.root_password}}{{end}}"
-      EOH
-
-        destination = "secrets/file.env"
-        env         = true
+        volume      = "redis-data"
+        destination = "/data"
       }
 
       service {
         provider = "nomad"
-        name = "postgres"
+        name = "redis"
         port = "db"
 
         tags = [
           "traefik.enable=true",
-          "traefik.tcp.routers.csi-controller.rule=HostSNI(`*`)",
-          "traefik.tcp.routers.csi-controller.entrypoints=postgres-tcp",
-          "traefik.tcp.routers.csi-controller.service=postgres",
+          "traefik.tcp.routers.redis.rule=HostSNI(`*`)",
+          "traefik.tcp.routers.redis.entrypoints=redis-tcp",
+          "traefik.tcp.routers.redis.service=redis",
         ]
 
         check {
@@ -71,6 +58,7 @@ job "postgres-job" {
         }
       }
     }
+    
     restart {
       attempts = 10
       interval = "5m"
@@ -78,9 +66,9 @@ job "postgres-job" {
       mode = "delay"
     }
 
-    volume "postgres-data" {
+    volume "redis-data" {
       type      = "csi"
-      source    = "postgres-data-new"
+      source    = "redis-data"
       access_mode = "single-node-writer"
       attachment_mode = "file-system"
       mount_options {

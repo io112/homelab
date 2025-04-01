@@ -1,5 +1,5 @@
 {
-    "allowed_policies": ["access-cf", "access-s3", "access-csi", "access-homelab-pg", "access-nomad-ro", "blinko", "gitea"],
+    "allowed_policies": ["access-cf", "access-s3", "access-csi", "access-homelab-pg", "access-nomad-ro", "blinko", "gitea", "paperless"],
     "token_explicit_max_ttl": 0,
     "name": "nomad-cluster",
     "orphan": true,
