@@ -89,9 +89,9 @@ job "gitea" {
                 GITEA__database__HOST="db.io12.dev"
                 GITEA__database__NAME=gitea
 
-                {{with secret "providers/data/gitea_root"}}
-                GITEA__database__USER={{.Data.data.user}}
-                GITEA__database__PASSWD={{.Data.data.password}}
+                {{with secret "postgres/static-creds/gitea-static-writer"}}
+                GITEA__database__USER="{{.Data.username}}"
+                GITEA__database__PASSWD="{{.Data.password}}"
                 {{end}}
                 EOH
 
