@@ -1,5 +1,12 @@
+name: Homelab deploy
+
 on:
   workflow_dispatch:
+    inputs:
+      all:
+        description: deploy all services
+        required: false
+        type: boolean
   push:
     branches:
     - main
@@ -16,8 +23,8 @@ jobs:
             file: cloudflared.hcl
           - dir: jobs/blinko
             file: blinko.hcl
-          - dir: jobs/postgres
-            file: postgres.hcl
+          # - dir: jobs/postgres
+          #   file: postgres.hcl
           - dir: jobs/gitea
             file: gitea.hcl
           - dir: jobs/paperless
@@ -39,16 +46,16 @@ jobs:
             changed:
               - './${{ matrix.dir }}/**'
       - uses: lucasmelin/setup-nomad@v1
-        if: steps.filter.outputs.changed == 'true'
+        if: steps.filter.outputs.changed == 'true' || inputs.all
       - name: Tailscale
-        if: steps.filter.outputs.changed == 'true'
+        if: steps.filter.outputs.changed == 'true' || inputs.all
         uses: tailscale/github-action@v3
         with:
           oauth-client-id: ${{ secrets.TS_OAUTH_CLIENT_ID }}
           oauth-secret: ${{ secrets.TS_OAUTH_SECRET }}
           tags: tag:homelab
       - name: Deploy app
-        if: steps.filter.outputs.changed == 'true'
+        if: steps.filter.outputs.changed == 'true' || inputs.all
         working-directory: ./${{ matrix.dir }}
         env:
           NOMAD_TOKEN: ${{ secrets.NOMAD_TOKEN }}
