@@ -80,10 +80,7 @@ job "blinko" {
         template {
           data = <<EOH
           NEXTAUTH_SECRET="{{with secret "apps/data/blinko_secret"}}{{.Data.data.secret}}{{end}}"
-          
-          {{ range nomadService "postgres" }}
-          DATABASE_URL="{{with secret "postgres/creds/writer"}}postgresql://{{.Data.username}}:{{.Data.password}}{{end}}@{{ .Address }}:{{ .Port }}/blinko"
-          {{ end }}
+          DATABASE_URL="{{with secret "postgres/creds/writer"}}postgresql://{{.Data.username}}:{{.Data.password}}{{end}}@db.io12.dev/blinko"
         EOH
 
           destination = "secrets/file.env"

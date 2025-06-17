@@ -86,10 +86,7 @@ job "gitea" {
 
             template {
                 data = <<EOH
-                {{ range nomadService "postgres" }}
-                GITEA__database__HOST="{{ .Address }}:{{ .Port }}"
-                {{ end }}
-
+                GITEA__database__HOST="db.io12.dev"
                 GITEA__database__NAME=gitea
 
                 {{with secret "providers/data/gitea_root"}}

@@ -195,10 +195,8 @@ job "paperless" {
 
             template {
                 data = <<EOH
-                {{ range nomadService "postgres" }}
-                PAPERLESS_DBHOST="{{ .Address }}"
-                PAPERLESS_DBPORT="{{ .Port }}"
-                {{ end }}
+                PAPERLESS_DBHOST="db.io12.dev"
+                PAPERLESS_DBPORT="5432"
 
                 {{ range nomadService "gotenberg" }}
                 PAPERLESS_TIKA_GOTENBERG_ENDPOINT=http://{{ .Address }}:{{ .Port }}
