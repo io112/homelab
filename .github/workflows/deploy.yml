@@ -7,9 +7,6 @@ on:
         description: deploy all services
         required: false
         type: boolean
-  push:
-    branches:
-    - main
     
 jobs:
   deploy_nomad:

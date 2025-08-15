@@ -32,7 +32,7 @@ job "traefik" {
       driver = "docker"
 
       config {
-        image = "traefik:v3.2"
+        image = "traefik:v3.5"
         network_mode = "host"
         args = ["--configFile=/local/traefik.yaml"]
         volumes = ["/opt/acme:/etc/traefik/acme"]
