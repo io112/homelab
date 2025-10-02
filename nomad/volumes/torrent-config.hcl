@@ -1,6 +1,6 @@
-id           = "torrent-data"
+id           = "torrent-config"
 namespace    = "default"
-name         = "torrent-data"
+name         = "torrent-config"
 type         = "csi"
 plugin_id    = "org.democratic-csi.nfs"
 capacity_max = "50G"

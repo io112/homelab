@@ -1,6 +1,6 @@
-id           = "prowlarr-config"
+id           = "sonarr-config"
 namespace    = "default"
-name         = "prowlarr-config"
+name         = "sonarr-config"
 type         = "csi"
 plugin_id    = "org.democratic-csi.nfs"
 capacity_max = "50G"

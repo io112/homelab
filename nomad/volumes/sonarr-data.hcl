@@ -1,9 +1,9 @@
-id           = "sonarr-config"
+id           = "tvshows-data"
 namespace    = "default"
-name         = "sonarr-config"
+name         = "tvshows-data"
 type         = "csi"
 plugin_id    = "org.democratic-csi.nfs"
-capacity_max = "50G"
+capacity_max = "500G"
 capacity_min = "5G"
 
 capability {
@@ -16,7 +16,13 @@ capability {
   attachment_mode = "file-system"
 }
 
+
+capability {
+  access_mode     = "multi-node-multi-writer"
+  attachment_mode = "file-system"
+}
+
 mount_options {
   fs_type     = "nfs"
-  mount_flags = ["noatime", "nfsvers=4"]
+  mount_flags = ["noatime", "nfsvers=4", "nolock"]
 }

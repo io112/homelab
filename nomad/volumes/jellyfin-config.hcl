@@ -1,6 +1,6 @@
-id           = "torrent-config"
+id           = "jellyfin-config"
 namespace    = "default"
-name         = "torrent-config"
+name         = "jellyfin-config"
 type         = "csi"
 plugin_id    = "org.democratic-csi.nfs"
 capacity_max = "50G"

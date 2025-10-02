@@ -189,7 +189,7 @@ job "paperless" {
             }
 
             resources {
-                cpu    = 2000
+                cpu    = 300
                 memory = 2048
             }
 

@@ -1,9 +1,9 @@
-id           = "prowlarr-config"
+id           = "torrent-data"
 namespace    = "default"
-name         = "prowlarr-config"
+name         = "torrent-data"
 type         = "csi"
 plugin_id    = "org.democratic-csi.nfs"
-capacity_max = "50G"
+capacity_max = "500G"
 capacity_min = "5G"
 
 capability {
@@ -13,6 +13,11 @@ capability {
 
 capability {
   access_mode     = "single-node-writer"
+  attachment_mode = "file-system"
+}
+
+capability {
+  access_mode     = "multi-node-multi-writer"
   attachment_mode = "file-system"
 }
 
