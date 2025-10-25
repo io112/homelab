@@ -24,6 +24,7 @@ job "tunnel" {
 
       vault {
         policies = ["access-cf"]
+        role = "nomad-workloads"
       }
 
       config {

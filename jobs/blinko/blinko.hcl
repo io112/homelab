@@ -57,6 +57,7 @@ job "blinko" {
         vault {
           policies = ["blinko"]
           change_mode   = "restart"
+          role = "nomad-workloads"
         }
 
         driver = "docker"

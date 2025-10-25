@@ -16,6 +16,7 @@ job "democratic-csi-nfs-controller" {
 
       vault {
         policies = ["access-csi"]
+        role = "nomad-workloads"
       }
 
       config {
@@ -124,6 +125,7 @@ EOH
         id        = "org.democratic-csi.nfs"
         type      = "controller"
         mount_dir = "/csi-data"
+        health_timeout = "150s"
       }
 
       resources {

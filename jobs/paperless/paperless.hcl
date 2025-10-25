@@ -151,6 +151,7 @@ job "paperless" {
             vault {
                 policies = ["paperless"]
                 change_mode   = "restart"
+                role = "nomad-workloads"
             }
         
             volume_mount {
@@ -178,7 +179,7 @@ job "paperless" {
             }
 
             config {
-                image = "ghcr.io/paperless-ngx/paperless-ngx:2.15.0-beta.rc1"
+                image = "ghcr.io/paperless-ngx/paperless-ngx:2.19"
                 ports = ["http"]
             }
 

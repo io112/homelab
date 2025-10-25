@@ -21,6 +21,7 @@ job "postgres-job" {
 
       vault {
         policies = ["access-homelab-pg"]
+        role = "nomad-workloads"
       }
 
       env {

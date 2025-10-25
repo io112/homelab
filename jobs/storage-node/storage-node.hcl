@@ -16,6 +16,7 @@ job "storage-node" {
 
         vault {
           policies = ["access-csi"]
+          role = "nomad-workloads"
         }
 
         config {
@@ -44,6 +45,7 @@ job "storage-node" {
           id        = "org.democratic-csi.nfs"
           type      = "node"
           mount_dir = "/csi-data"
+          health_timeout = "150s"
         }
 
         template {

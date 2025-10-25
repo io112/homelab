@@ -53,6 +53,7 @@ job "gitea" {
             vault {
                 policies = ["gitea"]
                 change_mode   = "restart"
+                role = "nomad-workloads"
             }
         
             volume_mount {

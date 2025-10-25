@@ -27,6 +27,7 @@ job "traefik" {
     task "trafik-task" {
       vault {
         policies = ["access-nomad-ro", "access-cf"]
+        role = "nomad-workloads"
       }
 
       driver = "docker"

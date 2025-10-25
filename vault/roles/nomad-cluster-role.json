@@ -1,8 +1,15 @@
 {
-    "allowed_policies": ["access-cf", "access-s3", "access-csi", "access-homelab-pg", "access-nomad-ro", "blinko", "gitea", "paperless"],
-    "token_explicit_max_ttl": 0,
-    "name": "nomad-cluster",
-    "orphan": true,
-    "token_period": 259200,
-    "renewable": true
+  "role_type": "jwt",
+  "bound_audiences": ["vault.io12.dev"],
+  "user_claim": "/nomad_job_id",
+  "user_claim_json_pointer": true,
+  "claim_mappings": {
+    "nomad_namespace": "nomad_namespace",
+    "nomad_job_id": "nomad_job_id",
+    "nomad_task": "nomad_task"
+  },
+  "token_type": "service",
+  "token_policies": ["access-cf", "access-s3", "access-csi", "access-homelab-pg", "access-nomad-ro", "blinko", "gitea", "paperless"],
+  "token_period": "1h",
+  "token_explicit_max_ttl": 0
 }
